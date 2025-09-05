@@ -31,8 +31,7 @@ Styling: Material UI Components & Custom CSS
 
 Clone the repository
 
-git clone https://github.com/your-username/weather-app.git
-cd weather-app
+git clone https:https://github.com/singhabhimanyu9838/Weather-App
 
 
 Install dependencies
