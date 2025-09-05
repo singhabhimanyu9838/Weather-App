@@ -2,44 +2,87 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import SunnyIcon from '@mui/icons-material/Sunny';
+import ThunderstormIcon from "@mui/icons-material/Thunderstorm";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import SunnyIcon from "@mui/icons-material/Sunny";
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
+import { Stack, Chip } from "@mui/material";
 
-export default function InfoBox({info}) {
+export default function InfoBox({ info }) {
+  const HOT_URL =
+    "https://images.unsplash.com/photo-1524594081293-190a2fe0baae?w=600&auto=format&fit=crop&q=60";
+  const COLD_URL =
+    "https://images.unsplash.com/photo-1612208695882-02f2322b7fee?w=600&auto=format&fit=crop&q=60";
+  const RAIN_URL =
+    "https://media.istockphoto.com/id/1321878632/photo/cloudy-sky-over-beautiful-flood-plain-landscape.webp?a=1&b=1&s=612x612&w=0&k=20&c=IEX0DCeEeWnkakFc1jQxI0oujXoMcU-AD38SP3g08R0=";
 
-    const HOT_URL = "https://images.unsplash.com/photo-1524594081293-190a2fe0baae?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aG90JTIwd2VhdGhlcnxlbnwwfHwwfHx8MA%3D%3D";
-    const COLD_URL = "https://images.unsplash.com/photo-1612208695882-02f2322b7fee?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29sZCUyMHdlYXRoZXJ8ZW58MHx8MHx8fDA%3D";
-    const RAIN_URL = "https://media.istockphoto.com/id/1321878632/photo/cloudy-sky-over-beautiful-flood-plain-landscape.webp?a=1&b=1&s=612x612&w=0&k=20&c=IEX0DCeEeWnkakFc1jQxI0oujXoMcU-AD38SP3g08R0=";
-  
+  const getIcon = () => {
+    if (info.humidity > 80) return <ThunderstormIcon sx={{ color: "#1976d2" }} />;
+    if (info.temp > 15) return <SunnyIcon sx={{ color: "#e5b53bff" }} />;
+    return <AcUnitIcon sx={{ color: "#03a9f4" }} />;
+  };
 
   return (
-    <>
-      
-      <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-          sx={{ height: 140 }}
-          image={info.humidity > 80 ? RAIN_URL : (info.temp > 15) ? HOT_URL : COLD_URL}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {info.city} {
-              info.humidity > 80 
-              ? <ThunderstormIcon/> : (info.temp > 15) ? <SunnyIcon/> : <AcUnitIcon/>
-            }
+    <Card
+      sx={{
+        maxWidth: 400,
+        borderRadius: "20px",
+        boxShadow: 5,
+        mt: 3,
+      }}
+    >
+      <CardMedia
+        sx={{ height: 180 }}
+        image={
+          info.humidity > 80 ? RAIN_URL : info.temp > 15 ? HOT_URL : COLD_URL
+        }
+      />
+      <CardContent>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
+            {info.city}
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }} component="span">
-           <p>Temperature - {info.temp}&deg;C</p>
-           <p>Humidity - {info.humidity}</p>
-           <p>Min temp - {info.tempMin}&deg;C </p>
-           <p>Max temp - {info.tempMax}&deg;C</p>
-           <p>The weather can be described as <b>{info.weather} </b> and feels like - {info.feelsLike}&deg;C</p>
-          </Typography>
-         
+          {getIcon()}
+        </Stack>
 
-        </CardContent>
-        
-      </Card>
-    </>
+        <Typography variant="h4" sx={{ mt: 1 }}>
+          {info.temp}°C
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          The weather can be described as{" "}
+          <b style={{ textTransform: "capitalize" }}>{info.weather}</b> and feels
+          like {info.feelsLike}°C.
+        </Typography>
+
+        {/* Chips for extra info */}
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          sx={{ mt: 2, gap: "10px" }}
+        >
+          <Chip
+            icon={<DeviceThermostatIcon />}
+            label={`Min: ${info.tempMin}°C`}
+            color="primary"
+            variant="outlined"
+          />
+          <Chip
+            icon={<DeviceThermostatIcon />}
+            label={`Max: ${info.tempMax}°C`}
+            color="primary"
+            variant="outlined"
+          />
+          <Chip
+            icon={<WaterDropIcon />}
+            label={`Humidity: ${info.humidity}%`}
+            color="info"
+            variant="outlined"
+          />
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
